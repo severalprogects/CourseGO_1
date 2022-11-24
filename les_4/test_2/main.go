@@ -30,33 +30,37 @@ func createList(slice []int) *listNode {
 	case 2:
 		nextItem := &listNode{Val: slice[1]}
 		return &listNode{Val: slice[0], Next: nextItem}
-		// return createItemList(&listNode{Val: slice[0]}, slice[1]) //Возвращает последний элемент, а не первый
 	default:
-		/*
-			nextItem := &listNode{Val: slice[1]}
-			firstItem := &listNode{Val: slice[0], Next: nextItem}
-			prevItem := nextItem
-
-			for i := 2; i < len(slice); i++ {
-				nextItem = &listNode{Val: slice[i]}
-				prevItem.Next = nextItem
-			}
-			return firstItem
-		*/
-
 		nextItem := &listNode{Val: slice[1]}
 		firstItem := &listNode{Val: slice[0], Next: nextItem}
-		for i := 1; i < len(slice); i++ {
+		for i := 2; i < len(slice); i++ {
 			nextItem = createItemList(nextItem, slice[i])
 		}
 		return firstItem
 	}
 }
 
+func deleteDuplicates(list *listNode) {
+	for list.Next != nil {
+		if (list.Val == list.Next.Val) && (list.Next != nil) {
+			list.Next = list.Next.Next
+		} else {
+			list = list.Next
+		}
+	}
+}
+
 func main() {
 	slice := []int{1, 2, 2, 2, 2, 2, 3, 4, 5, 5, 5}
 	list := createList(slice)
+	forList := list
 	for i := 0; i < len(slice); i++ {
+		fmt.Println(forList.Val)
+		forList = forList.Next
+	}
+
+	deleteDuplicates(list)
+	for list.Next != nil {
 		fmt.Println(list.Val)
 		list = list.Next
 	}
